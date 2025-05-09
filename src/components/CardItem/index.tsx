@@ -23,21 +23,32 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 function CardItem({ item }: IProps) {
   console.log({ item });
   return (
-    <li className="border border-pink-500 m-2 h-min p-2">
-      <p>{item?.awardYear}</p>
-      <p>{item?.dateAwarded || "Sem data"}</p>
-      <p>{item?.category.en}</p>
-      <p>
-        {item?.laureates?.length > 1
-          ? item?.laureates[0]?.fullName?.en +
-            " +" +
-            item?.laureates?.length
-          : item?.laureates[0]?.fullName?.en
-          ? item?.laureates[0]?.fullName?.en
-          : item?.laureates[0]?.orgName?.en
-          ? item?.laureates[0]?.orgName?.en
-          : ""}
-      </p>
+    <li className="border-1 rounded border-zinc-400 bg-zinc-200 shadow-lg flex flex-col justify-center m-2 h-min p-4">
+      <span className="flex items-center">
+        <p className="pr-1 font-semibold">Category:</p>
+        {item?.category.en}
+      </span>
+      <span className="flex items-center">
+        <p className="pr-1 font-semibold">Date:</p>
+        {item?.dateAwarded || "Sem data"}
+      </span>
+      <span className="flex items-center">
+        <p className="pr-1 font-semibold">Laureates:</p>
+        {item?.laureates?.length > 1 ? (
+          <span className="flex items-center">
+            {item?.laureates[0]?.fullName?.en}
+            <p className="ml-2 p-2 rounded-full font-semibold border-1 bg-zinc-500 text-neutral-100">
+              {" +" + item?.laureates?.length}
+            </p>
+          </span>
+        ) : item?.laureates[0]?.fullName?.en ? (
+          item?.laureates[0]?.fullName?.en
+        ) : item?.laureates[0]?.orgName?.en ? (
+          item?.laureates[0]?.orgName?.en
+        ) : (
+          ""
+        )}
+      </span>
     </li>
   );
 }

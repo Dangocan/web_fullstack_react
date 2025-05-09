@@ -43,7 +43,7 @@ function App() {
         "O valor precisa ser o numero de um ano válido maior que 1901 no formato AAAA"
       );
     } else {
-      setNobelArray([])
+      setNobelArray([]);
       setError("");
 
       const nobelArray = await handleApiCall(searchValue || "");
@@ -59,32 +59,38 @@ function App() {
 
   return (
     <>
-      <header className="h-[50px] border-2 border-red-500">header</header>
-      <main className="border-2 border-red-500 grid w-full h-[calc(100vh-50px)] grid-cols-[20rem_1fr] gap-6">
-        <div className="border-2 border-blue-500">
-          <div className="flex items-center justify-center gap-2">
-            <label htmlFor="nobelSerchField" className="mr-2">
-              Pesquisar ano
-            </label>
-            <input
-              id="nobelSerchTextArea"
-              type="search"
-              name="nobelSerchField"
-              placeholder="Insira o Ano AAAA"
-              className="border p-1 rounded"
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <button
-              id="submitSearch"
-              type="submit"
-              className="px-2 py-1 border rounded cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }}
-            >
-              &#128269;
-            </button>
+      <header className="h-[50px] flex justify-center items-center p-4 bg-zinc-900 text-neutral-100 font-semibold">
+        Nobel Prize Finder
+      </header>
+      <main className="bg-zinc-50 grid w-full h-[calc(100vh-50px)] grid-cols-[20rem_1fr] gap-6">
+        <div className="border-r-1 border-zinc-400 bg-zinc-100 shadow-lg p-4 flex flex-col">
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col">
+              <label htmlFor="nobelSerchField" className="mr-2 mb-2">
+                Pesquisar ano:
+              </label>
+              <div className="flex flex-nowrap items-center">
+                <input
+                  id="nobelSerchTextArea"
+                  type="search"
+                  name="nobelSerchField"
+                  placeholder="Insira o Ano AAAA"
+                  className="border p-1 rounded"
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <button
+                  id="submitSearch"
+                  type="submit"
+                  className="ml-2 px-2 py-1 border rounded cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                  }}
+                >
+                  &#128269;
+                </button>
+              </div>
+            </div>
           </div>
           {error && (
             <p id="error" className="pt-2 text-red-500">
@@ -97,7 +103,7 @@ function App() {
         </div>
         <ul
           id="nobelList"
-          className="border-2 border-blue-500 flex flex-wrap gap-2 max-h-[calc(100vh-50px)] overflow-auto"
+          className="border-l-1 border-zinc-400 bg-zinc-100 flex flex-wrap p-4 max-h-[calc(100vh-50px)] overflow-auto"
         >
           {nobelArray.length > 0 &&
             nobelArray.map((item, index) => (
@@ -115,7 +121,9 @@ function App() {
           )}
         </ul>
       </main>
-      <footer className="border-2 border-red-500">footer</footer>
+      <footer className="flex justify-center items-center p-4 bg-zinc-900 text-neutral-100 font-semibold">
+        Made by Dangocan
+      </footer>
     </>
   );
 }
