@@ -1,4 +1,5 @@
 import React from "react";
+import { useDialog } from "../../contexts/DialogContext";
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   item: {
@@ -21,9 +22,12 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function CardItem({ item }: IProps) {
-  console.log({ item });
+  const { openDialog } = useDialog();
   return (
-    <li className="border-1 rounded border-zinc-400 bg-zinc-200 shadow-lg flex flex-col justify-center m-2 h-min p-4">
+    <li
+      className="border-1 rounded border-zinc-400 bg-zinc-200 shadow-lg flex flex-col justify-center m-2 h-min p-4"
+      onClick={() => openDialog(item)}
+    >
       <span className="flex items-center">
         <p className="pr-1 font-semibold">Category:</p>
         {item?.category.en}

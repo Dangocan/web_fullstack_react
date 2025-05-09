@@ -1,5 +1,6 @@
 import react from "react";
 import { CardItem } from "./components";
+import { DialogProvider } from "./contexts/DialogContext";
 
 function App() {
   const [nobelArray, setNobelArray] = react.useState([]);
@@ -10,7 +11,7 @@ function App() {
 
   const itemListRef = react.useRef<HTMLUListElement>(null);
 
-  const api = async (url) =>
+  const api = async (url: string) =>
     await fetch(`https://api.nobelprize.org/2.1${url}`, {
       method: "GET",
       headers: {
@@ -27,7 +28,7 @@ function App() {
         return error;
       });
 
-  const handleApiCall = async (param) => {
+  const handleApiCall = async (param: string) => {
     setLoading(true);
     return await api(`/nobelPrizes?nobelPrizeYear=${+param}`)
       .then(({ nobelPrizes }) => {
@@ -43,7 +44,7 @@ function App() {
   const handleSubmit = async () => {
     if (Number.isNaN(Number(searchValue)) || searchValue.length !== 4) {
       setError(
-        "O valor precisa ser o numero de um ano válido maior que 1901 no formato AAAA"
+        "The value must be a valid year number greater than 1901 in YYYY format."
       );
     } else {
       setNobelArray([]);
@@ -94,7 +95,7 @@ function App() {
   }, [nobelArray]);
 
   return (
-    <>
+    <DialogProvider>
       <header className="h-[50px] flex justify-center items-center p-4 bg-zinc-900 text-neutral-100 font-semibold">
         Nobel Prize Finder
       </header>
@@ -103,7 +104,7 @@ function App() {
           <div className="flex items-center gap-2">
             <div className="flex flex-col">
               <label htmlFor="nobelSerchField" className="mr-2 mb-2">
-                Pesquisar ano:
+                Search year:
               </label>
               <div className="flex flex-nowrap items-center">
                 <input
@@ -134,7 +135,7 @@ function App() {
             </p>
           )}
           <p id="info" className="pt-4">
-            A base de dados aceita apenas dados a partir de 1901
+            The database only accepts years from 1901 onwards
           </p>
         </div>
         <ul
@@ -150,12 +151,12 @@ function App() {
             ))}
           {loading && (
             <div className="flex items-center justify-center w-full h-full">
-              <p>Carregando...</p>
+              <p>Loading...</p>
             </div>
           )}
           {nobelArray.length === 0 && !loading && (
             <div className="flex items-center justify-center w-full h-full">
-              <p>Sem dados para exibir</p>
+              <p>No data to display</p>
             </div>
           )}
           {showTopButton && (
@@ -171,8 +172,7 @@ function App() {
       <footer className="flex justify-center items-center p-4 bg-zinc-900 text-neutral-100 font-semibold">
         Made by Dangocan
       </footer>
-      <dialog></dialog>
-    </>
+    </DialogProvider>
   );
 }
 
