@@ -6,6 +6,9 @@ function App() {
   const [error, setError] = react.useState("");
   const [searchValue, setSearchValue] = react.useState("");
   const [loading, setLoading] = react.useState(false);
+  const [showTopButton, setShowTopButton] = react.useState(false);
+
+  const itemListRef = react.useRef<HTMLUListElement>(null);
 
   const api = async (url) =>
     await fetch(`https://api.nobelprize.org/2.1${url}`, {
@@ -50,6 +53,39 @@ function App() {
       setNobelArray(nobelArray);
     }
   };
+
+  const scrollToTop = () => {
+    if (itemListRef.current) {
+      itemListRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Efeito para monitorar o scroll
+  react.useEffect(() => {
+    const listElement = itemListRef.current;
+
+    const handleScroll = () => {
+      console.log({ aaa: listElement?.scrollTop });
+      if (listElement?.scrollTop && listElement?.scrollTop > 30) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
+
+    if (listElement) {
+      listElement.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (listElement) {
+        listElement.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   react.useEffect(() => {
     if (nobelArray.length > 0) {
@@ -103,11 +139,14 @@ function App() {
         </div>
         <ul
           id="nobelList"
-          className="border-l-1 border-zinc-400 bg-zinc-100 flex flex-wrap p-4 max-h-[calc(100vh-50px)] overflow-auto"
+          className="border-l-1 border-zinc-400 bg-zinc-100 flex flex-col flex-nowrap p-4 max-h-[calc(100vh-50px)] overflow-auto"
+          ref={itemListRef}
         >
           {nobelArray.length > 0 &&
             nobelArray.map((item, index) => (
-              <CardItem key={index} item={item} />
+              <>
+                <CardItem key={index} item={item} />
+              </>
             ))}
           {loading && (
             <div className="flex items-center justify-center w-full h-full">
@@ -119,11 +158,20 @@ function App() {
               <p>Sem dados para exibir</p>
             </div>
           )}
+          {showTopButton && (
+            <button
+              className="absolute bottom-4 right-4 rounded font-semibold border-1 bg-zinc-900 text-neutral-100 p-2"
+              onClick={scrollToTop}
+            >
+              TOP
+            </button>
+          )}
         </ul>
       </main>
       <footer className="flex justify-center items-center p-4 bg-zinc-900 text-neutral-100 font-semibold">
         Made by Dangocan
       </footer>
+      <dialog></dialog>
     </>
   );
 }
